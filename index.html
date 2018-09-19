@@ -104,7 +104,7 @@
                     reverseContainer.removeChild(reverseContainer.lastChild);
                 }
                 reversedChicagoStartups.forEach(function(chicagoStartup, index) {
-                    console.log(chicagoStartup);
+                    //console.log(chicagoStartup);
                     var childDiv = document.createElement('div');
                     var text = document.createTextNode(chicagoStartup);
                     childDiv.appendChild(text);
@@ -113,7 +113,9 @@
             }
             else {
                 //TODO:: REPLACE [chicagoStartups.reverse()] WITH A FUNCTION CALLED "chicagoStartupsReverse"
-                chicagoStartups.reverse().forEach( function(startup) {
+
+                //chicagoStartups.reverse().forEach( function(startup) {
+                  chicagoStartupsReverse().forEach( function(startup) {  
                     var childDiv = document.createElement('div');
                     var text = document.createTextNode(startup);
                     childDiv.appendChild(text);
@@ -133,8 +135,16 @@
                     DATA STRUTUCTURES REGARDLESS OF THE PROGRAMMING LANGUAGE
         
         */
+        var len = chicagoStartups.length;
+        console.log(len);
+        for (var i = len -1; i >= 0; i--) {
+            reversedStartups.push(chicagoStartups[i]); 
+        }
+
+
         return reversedStartups;
     }
+
 
     function cleanAndCountCharacters() {
         console.log('CLEAN AND COUNT CHARACTERS');
@@ -143,6 +153,25 @@
               DISPLAYS THE NUMBER OF REMAINING CHARACTERS NEXT TO THE FULL WORD.
               DONT FORGET TO REMOVE LEADING AND TRAILING WHITESPACES AS WELL
         */
+        
+        var rContainer = document.getElementById("rootContainer");
+        var startups = rContainer.childNodes[0];
+        //console.log(startups);
+        
+        if (startups) {
+            if (startups.hasChildNodes()) {
+                var clen = startups.childNodes.length;
+                //console.log(clen);
+                for (var j = 0; j < clen; j++) {
+                    var child = startups.childNodes[j].innerHTML;
+                    //console.log(child);
+                    var newchl = child.replace(/[^a-zA-Z]/g, "");
+                    startups.childNodes[j].innerHTML = newchl + ' ' + newchl.length;
+                }
+                
+            }
+        }
+
     }
     
 
@@ -153,16 +182,64 @@
         FROM VERTICAL, TO HORIZONTAL.
         IF THE USER CLICKS THE TOGGLE BUTTON AGAIN THE NAMES SHOULD ONCE AGAIN BE DISPLAYED VERTICALLY.
         TIPS: 
-            1.  MAKE SURE TO READ AND UNDERSTAND THE DIFFERENCE BETWEEN BLOCK ELEMENTS SUCH AS A DIV, 
-                AND INLINE ELEMENTS SUCH AS A SPAN.
+            1.  MAKE SURE TO READ AND UNDERSTAND THE DIFFERENCE BETWEEN BLOCK ELEMENTS SUCH AS A DIV, AND INLINE ELEMENTS SUCH AS A SPAN.
             2.  DIVIDE AND CONQUER.
             3.  
         */
+         var togContainer = document.createElement('div');
+         togContainer.id = 'togContainer';
+         var togBtn = document.createElement('button');
+         var togBtnText = document.createTextNode('toggle');
+         togBtn.onclick = toggleElements;
+         togBtn.appendChild(togBtnText);
+         var toggleButtonContainer = document.createElement('div');
+         toggleButtonContainer.appendChild(togBtn);
+         document.getElementById('rootContainer').appendChild(toggleButtonContainer);
+         document.getElementById('rootContainer').appendChild(togContainer);
+
+    }
+
+    function toggleElements() {
+        console.log("brk2");
+        var togContainer = document.getElementById('togContainer');
+         var togChicagoStartups = [];
+        if (togContainer) {
+            if (togContainer.hasChildNodes() && togContainer.firstChild.tagName == 'SPAN') {
+                console.log("brk3");
+                while (togContainer.hasChildNodes()) {
+                    togChicagoStartups.push(togContainer.firstChild.innerHTML);
+                    togContainer.removeChild(togContainer.firstChild);
+                }
+                togChicagoStartups.forEach(function (chicagoStartup, index) {
+                    var childDiv = document.createElement('div');
+                    var text = document.createTextNode(chicagoStartup);
+                    childDiv.appendChild(text);
+                    togContainer.appendChild(childDiv);
+                });
+
+            }else {
+                console.log("brk5");
+                while (togContainer.hasChildNodes()) {
+                    togContainer.removeChild(togContainer.firstChild);
+                }
+                chicagoStartups.forEach( function (startup) {
+                    var childSpan = document.createElement('span');
+                    var text = document.createTextNode(startup);
+                    childSpan.appendChild(text);
+                    togContainer.appendChild(childSpan);
+
+                });
+                
+            }
+        }
+
     }
     
     function run() {
         initDocument();
         initReverse();
+        toggleDisplay();
+        
     }
     run();
     
@@ -170,7 +247,9 @@
         displayInstructions: true
     };
     //TODO INVOKE THIS ANONYMOUS FUNCTION TO DISPLAY HOMEWORK INSTRUCTIONS IN THE CONSOLE
-    (function() {
+    
+
+    var display = function()  {
         if (flags.displayInstructions) {
             console.log(`
                             ASSUMPTIONS: !!! NO JQUERY !!! 
@@ -191,11 +270,13 @@
                             Make sure I understand whats going on and do a google search on anything that is confusing.  
                             THE BETTER YOU UNDERSTAND THE EXAMPLE THE EASIER THIS SHOULD BE. THEN REVIEW THE TODOS AND START BY TRYING TO SOLVE THE EASIEST
                             PROBLEM.
-                            FROM MY OWN EXPERIENCE, I FIND THAT WHEN IM STRUGGLING WITH A PROBLEM, IT USUALLY MEANS
+                            FROM MY EXPERIENCE, I FIND THAT WHEN IM STRUGGLING WITH A PROBLEM, IT USUALLY MEANS
                             I DONT FULLY UNDERSTAND THE TOOLS THAT I AM USING.
                             GOOD LUCK, SEE YOU ON THE FLIPPITY FLOP "\_(**/)_/"
                         `);
         }
         
-    });
+    };
+    display();
+
 </script>
