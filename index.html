@@ -145,7 +145,7 @@
         return reversedStartups;
     }
 
-
+    var flag = true;
     function cleanAndCountCharacters() {
         console.log('CLEAN AND COUNT CHARACTERS');
         /*
@@ -156,22 +156,55 @@
         
         var rContainer = document.getElementById("rootContainer");
         var startups = rContainer.childNodes[0];
-        //console.log(startups);
+        var myMap = new Map();
+        var names = '';
         
+        //console.log(startups);
+                
         if (startups) {
             if (startups.hasChildNodes()) {
                 var clen = startups.childNodes.length;
                 //console.log(clen);
-                for (var j = 0; j < clen; j++) {
+                for (var j = 0; j < 16; j++) {   // hardcode here is to protect screen output in 2nd click
                     var child = startups.childNodes[j].innerHTML;
                     //console.log(child);
                     var newchl = child.replace(/[^a-zA-Z]/g, "");
+                    if (flag) {
+                        names = names + newchl;
+                    }
                     startups.childNodes[j].innerHTML = newchl + ' ' + newchl.length;
                 }
                 
             }
         }
+        
+        // set object to count the occurrences
+        var count = {                         
+            countOccur: function () {
+                for (var p = 0; p < names.length; p++) {
+                    var letter = names.charAt(p);
+                    if (myMap.has(letter)) {
+                        myMap.set(letter, myMap.get(letter)+1);
+                    }else {
+                        myMap.set(letter, 1);
+                    }
+                }
 
+            }
+        }
+
+        if (flag){
+            count.countOccur();  // call obj function
+            var occuContainer = document.createElement('div');
+            myMap.forEach( function (key, val) {
+                var letDiv = document.createElement('div');
+                var textNode = document.createTextNode(val + ':  ' + key);
+                letDiv.appendChild(textNode);
+                occuContainer.appendChild(letDiv);
+            });
+            startups.appendChild(occuContainer);
+            flag = false;
+        }
     }
     
 
